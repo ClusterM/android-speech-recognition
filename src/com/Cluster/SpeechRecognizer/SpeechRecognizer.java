@@ -26,52 +26,52 @@ public class SpeechRecognizer
 {
 	final String API_KEY = "YOUR_API_KEY";
 	final String TAG = "SpeechRecognizer";
-	// Частота дискретизации
+	// Р§Р°СЃС‚РѕС‚Р° РґРёСЃРєСЂРµС‚РёР·Р°С†РёРё
 	final int SAMPLE_RATE = 8000;
-	// Длительность анализируемых сэмплов
+	// Р”Р»РёС‚РµР»СЊРЅРѕСЃС‚СЊ Р°РЅР°Р»РёР·РёСЂСѓРµРјС‹С… СЃСЌРјРїР»РѕРІ
 	final int TIMER_INTERVAL = 100;
-	// Время, в течении которого анализируется громкость
+	// Р’СЂРµРјСЏ, РІ С‚РµС‡РµРЅРёРё РєРѕС‚РѕСЂРѕРіРѕ Р°РЅР°Р»РёР·РёСЂСѓРµС‚СЃСЏ РіСЂРѕРјРєРѕСЃС‚СЊ
 	final int MAX_ANALYZE_LENGTH = 3000;
-	// Соотношение громкости речи к громкости фона
+	// РЎРѕРѕС‚РЅРѕС€РµРЅРёРµ РіСЂРѕРјРєРѕСЃС‚Рё СЂРµС‡Рё Рє РіСЂРѕРјРєРѕСЃС‚Рё С„РѕРЅР°
 	final float VOLUME_RATIO = 1.25f;
-	// Максимальное кол-во ошибок, после которого увеличивается амплитуда
-	// срабатывания
+	// РњР°РєСЃРёРјР°Р»СЊРЅРѕРµ РєРѕР»-РІРѕ РѕС€РёР±РѕРє, РїРѕСЃР»Рµ РєРѕС‚РѕСЂРѕРіРѕ СѓРІРµР»РёС‡РёРІР°РµС‚СЃСЏ Р°РјРїР»РёС‚СѓРґР°
+	// СЃСЂР°Р±Р°С‚С‹РІР°РЅРёСЏ
 	final float MAX_ERROR_COUNT = 3;
-	// Если в течении этого времени нет ошибок, сбрасываем счётчик ошибок
+	// Р•СЃР»Рё РІ С‚РµС‡РµРЅРёРё СЌС‚РѕРіРѕ РІСЂРµРјРµРЅРё РЅРµС‚ РѕС€РёР±РѕРє, СЃР±СЂР°СЃС‹РІР°РµРј СЃС‡С‘С‚С‡РёРє РѕС€РёР±РѕРє
 	final int MAX_NO_ERROR_TIME = 10000;
 
-	// Слушатель
+	// РЎР»СѓС€Р°С‚РµР»СЊ
 	VoiceRecognizedListener voiceRecognizedListener = null;
-	// Какой процент значений громкости должен превышать уровень определения
+	// РљР°РєРѕР№ РїСЂРѕС†РµРЅС‚ Р·РЅР°С‡РµРЅРёР№ РіСЂРѕРјРєРѕСЃС‚Рё РґРѕР»Р¶РµРЅ РїСЂРµРІС‹С€Р°С‚СЊ СѓСЂРѕРІРµРЅСЊ РѕРїСЂРµРґРµР»РµРЅРёСЏ
 	float detectRatio = 0.25f;
-	// Сколько нужно молчать перед распознаванием фразы в миллисекундах
+	// РЎРєРѕР»СЊРєРѕ РЅСѓР¶РЅРѕ РјРѕР»С‡Р°С‚СЊ РїРµСЂРµРґ СЂР°СЃРїРѕР·РЅР°РІР°РЅРёРµРј С„СЂР°Р·С‹ РІ РјРёР»Р»РёСЃРµРєСѓРЅРґР°С…
 	int maxSilenceLength = 500;
-	// Минимальная длина фразы в миллисекундах
+	// РњРёРЅРёРјР°Р»СЊРЅР°СЏ РґР»РёРЅР° С„СЂР°Р·С‹ РІ РјРёР»Р»РёСЃРµРєСѓРЅРґР°С…
 	int minRecordLength = 500; 
-	// Максимальная длина фразы в миллисекундах
+	// РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ РґР»РёРЅР° С„СЂР°Р·С‹ РІ РјРёР»Р»РёСЃРµРєСѓРЅРґР°С…
 	int maxRecordLength = 5000;
-	// Языка
+	// РЇР·С‹РєР°
 	String language = "en-US";
-	// Максимальное кол-во результатов
+	// РњР°РєСЃРёРјР°Р»СЊРЅРѕРµ РєРѕР»-РІРѕ СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ
 	int maxResults = 5;
 
-	// Громкость, с которой должен звучать голос
+	// Р“СЂРѕРјРєРѕСЃС‚СЊ, СЃ РєРѕС‚РѕСЂРѕР№ РґРѕР»Р¶РµРЅ Р·РІСѓС‡Р°С‚СЊ РіРѕР»РѕСЃ
 	int detectLevel = 32767;
-	// Пишем ли звук в данных момент
+	// РџРёС€РµРј Р»Рё Р·РІСѓРє РІ РґР°РЅРЅС‹С… РјРѕРјРµРЅС‚
 	boolean recording = false;
-	// Длина записи
+	// Р”Р»РёРЅР° Р·Р°РїРёСЃРё
 	int recordLength = 0;
-	// Длина тишины
+	// Р”Р»РёРЅР° С‚РёС€РёРЅС‹
 	int silenceLength = 0;
-	// Сколько звука мы проанализировали на громкость
+	// РЎРєРѕР»СЊРєРѕ Р·РІСѓРєР° РјС‹ РїСЂРѕР°РЅР°Р»РёР·РёСЂРѕРІР°Р»Рё РЅР° РіСЂРѕРјРєРѕСЃС‚СЊ
 	int analyzeLength = 0;
-	// Количество ошибок распознавания подряд
+	// РљРѕР»РёС‡РµСЃС‚РІРѕ РѕС€РёР±РѕРє СЂР°СЃРїРѕР·РЅР°РІР°РЅРёСЏ РїРѕРґСЂСЏРґ
 	int errorCount = 0;
-	// Время, в течении которого нет ошибок
+	// Р’СЂРµРјСЏ, РІ С‚РµС‡РµРЅРёРё РєРѕС‚РѕСЂРѕРіРѕ РЅРµС‚ РѕС€РёР±РѕРє
 	int noErrorTimer = 0;
-	// Максимальная громкость фона, когда человек молчит
+	// РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ РіСЂРѕРјРєРѕСЃС‚СЊ С„РѕРЅР°, РєРѕРіРґР° С‡РµР»РѕРІРµРє РјРѕР»С‡РёС‚
 	int maxSilenceLevel = 0;
-	// Максимальная громкость
+	// РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ РіСЂРѕРјРєРѕСЃС‚СЊ
 	int maxLevel = 0;
 	
 	AudioRecord aRecorder;
@@ -151,8 +151,8 @@ public class SpeechRecognizer
 	public void start() throws Exception
 	{
 		if (aRecorder != null)
-			return; // Уже запущены
-		// Параметры захвата
+			return; // РЈР¶Рµ Р·Р°РїСѓС‰РµРЅС‹
+		// РџР°СЂР°РјРµС‚СЂС‹ Р·Р°С…РІР°С‚Р°
 		int audioSource = MediaRecorder.AudioSource.MIC;
 		final int channelConfig = AudioFormat.CHANNEL_IN_MONO;
 		int nChannels = 1;
@@ -166,7 +166,7 @@ public class SpeechRecognizer
 			Log.w(TAG, "Increasing buffer size to " + Integer.toString(bufferSize));
 		}
 
-		// Запускаем захват аудио
+		// Р—Р°РїСѓСЃРєР°РµРј Р·Р°С…РІР°С‚ Р°СѓРґРёРѕ
 		aRecorder = new AudioRecord(audioSource, SAMPLE_RATE, channelConfig, audioFormat, bufferSize);
 		if (aRecorder.getState() != AudioRecord.STATE_INITIALIZED)
 		{
@@ -178,7 +178,7 @@ public class SpeechRecognizer
 		aRecorder.setPositionNotificationPeriod(framePeriod);
 		buffer = new byte[framePeriod * bSamples / 8 * nChannels];
 		aRecorder.startRecording();
-		// Нужно для некоторых старых версий Android
+		// РќСѓР¶РЅРѕ РґР»СЏ РЅРµРєРѕС‚РѕСЂС‹С… СЃС‚Р°СЂС‹С… РІРµСЂСЃРёР№ Android
 		aRecorder.read(buffer, 0, buffer.length);
 		Log.i(TAG, "Started");
 	}
@@ -200,14 +200,14 @@ public class SpeechRecognizer
 		{
 			if (aRecorder == null)
 				return; // Stopped
-			// Читаем данные
+			// Р§РёС‚Р°РµРј РґР°РЅРЅС‹Рµ
 			int len = aRecorder.read(buffer, 0, buffer.length);
 			int maxAmplitude = 0;
 			int detects = 0;
-			// Проходимся вдоль записанного сэмпла
+			// РџСЂРѕС…РѕРґРёРјСЃСЏ РІРґРѕР»СЊ Р·Р°РїРёСЃР°РЅРЅРѕРіРѕ СЃСЌРјРїР»Р°
 			for (int p = 0; p < len - 1; p += 2)
 			{
-				// WTF. Конвертируем little-endian signed bytes в int
+				// WTF. РљРѕРЅРІРµСЂС‚РёСЂСѓРµРј little-endian signed bytes РІ int
 				int level = buffer[p + 1] * 256 + ((buffer[p] >= 0) ? buffer[p] : (256 + buffer[p]));
 				int amplitude = Math.abs(level);
 				if (amplitude > maxAmplitude)
@@ -216,14 +216,14 @@ public class SpeechRecognizer
 					detects++;
 			}
 
-			// Анализ фоновой громоксти
-			// Запоминаем максимальную среднюю громкость
+			// РђРЅР°Р»РёР· С„РѕРЅРѕРІРѕР№ РіСЂРѕРјРѕРєСЃС‚Рё
+			// Р—Р°РїРѕРјРёРЅР°РµРј РјР°РєСЃРёРјР°Р»СЊРЅСѓСЋ СЃСЂРµРґРЅСЋСЋ РіСЂРѕРјРєРѕСЃС‚СЊ
 			if (maxAmplitude > maxLevel)
 			{
 				maxLevel = maxAmplitude;
 			}
-			// Если достаточно тихо, то смотрим - не понизить ли громкость
-			// срабатывания?
+			// Р•СЃР»Рё РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ С‚РёС…Рѕ, С‚Рѕ СЃРјРѕС‚СЂРёРј - РЅРµ РїРѕРЅРёР·РёС‚СЊ Р»Рё РіСЂРѕРјРєРѕСЃС‚СЊ
+			// СЃСЂР°Р±Р°С‚С‹РІР°РЅРёСЏ?
 			if (detects == 0)
 			{
 				if (analyzeLength >= MAX_ANALYZE_LENGTH)
@@ -246,43 +246,43 @@ public class SpeechRecognizer
 			// Log.d(TAG, "Data: " + len + ", max: " + maxAmplitude +
 			// ", detects: " + detects);
 
-			// Достигнуто ли нужное количество превышений амплитуды
-			// срабатывания?
+			// Р”РѕСЃС‚РёРіРЅСѓС‚Рѕ Р»Рё РЅСѓР¶РЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РїСЂРµРІС‹С€РµРЅРёР№ Р°РјРїР»РёС‚СѓРґС‹
+			// СЃСЂР°Р±Р°С‚С‹РІР°РЅРёСЏ?
 			boolean voiceDetected = (detects > len / 2 * detectRatio);
 
-			if (!recording) // Если запись не идёт...
+			if (!recording) // Р•СЃР»Рё Р·Р°РїРёСЃСЊ РЅРµ РёРґС‘С‚...
 			{
-				if (voiceDetected) // И мы обнаружили вспышку амплитуды
+				if (voiceDetected) // Р РјС‹ РѕР±РЅР°СЂСѓР¶РёР»Рё РІСЃРїС‹С€РєСѓ Р°РјРїР»РёС‚СѓРґС‹
 				{
-					// Запускаем запись
+					// Р—Р°РїСѓСЃРєР°РµРј Р·Р°РїРёСЃСЊ
 					recording = true;
 					recordLength = TIMER_INTERVAL;
 					Log.d(TAG, "Voice record started");
 				} else
 				{
-					// Если запись не идёт, мы всегда держим в запасе один семпл
+					// Р•СЃР»Рё Р·Р°РїРёСЃСЊ РЅРµ РёРґС‘С‚, РјС‹ РІСЃРµРіРґР° РґРµСЂР¶РёРј РІ Р·Р°РїР°СЃРµ РѕРґРёРЅ СЃРµРјРїР»
 					record.reset();
 					record.write(buffer, 0, len);
-					// Тишина, ошибок точно нет
+					// РўРёС€РёРЅР°, РѕС€РёР±РѕРє С‚РѕС‡РЅРѕ РЅРµС‚
 					noErrorTimer++;
 					if (noErrorTimer >= MAX_NO_ERROR_TIME) errorCount = 0;
 				}
 			}
-			if (recording) // Если запись идёт (или началась только что)
+			if (recording) // Р•СЃР»Рё Р·Р°РїРёСЃСЊ РёРґС‘С‚ (РёР»Рё РЅР°С‡Р°Р»Р°СЃСЊ С‚РѕР»СЊРєРѕ С‡С‚Рѕ)
 			{
-				// Пишем звук в буфер
+				// РџРёС€РµРј Р·РІСѓРє РІ Р±СѓС„РµСЂ
 				recordLength += TIMER_INTERVAL;
 				record.write(buffer, 0, len);
 
-				// Если в этот раз голос не обнаружили
-				// Или если пишем его уже слишком долго
+				// Р•СЃР»Рё РІ СЌС‚РѕС‚ СЂР°Р· РіРѕР»РѕСЃ РЅРµ РѕР±РЅР°СЂСѓР¶РёР»Рё
+				// РР»Рё РµСЃР»Рё РїРёС€РµРј РµРіРѕ СѓР¶Рµ СЃР»РёС€РєРѕРј РґРѕР»РіРѕ
 				if (!voiceDetected || (maxRecordLength < recordLength))
 				{
-					// Считаем как долго
+					// РЎС‡РёС‚Р°РµРј РєР°Рє РґРѕР»РіРѕ
 					silenceLength += TIMER_INTERVAL;
 					if ((silenceLength >= maxSilenceLength) || (maxRecordLength < recordLength))
 					{
-						// Пора прекражать запись
+						// РџРѕСЂР° РїСЂРµРєСЂР°Р¶Р°С‚СЊ Р·Р°РїРёСЃСЊ
 						recording = false;
 						Log.d(TAG, "Voice record stopped, length: " + (recordLength - silenceLength));
 						if (recordLength - silenceLength >= minRecordLength)
@@ -297,14 +297,14 @@ public class SpeechRecognizer
 						}
 					}
 				} else
-					silenceLength = 0; // Не молчат, обнуляем счётчик тишины
+					silenceLength = 0; // РќРµ РјРѕР»С‡Р°С‚, РѕР±РЅСѓР»СЏРµРј СЃС‡С‘С‚С‡РёРє С‚РёС€РёРЅС‹
 			}			
 		}
 
 		@Override
 		public void onMarkerReached(AudioRecord recorder)
 		{
-			// Не нужно
+			// РќРµ РЅСѓР¶РЅРѕ
 		}
 	};
 
@@ -399,13 +399,13 @@ public class SpeechRecognizer
 			results.add(r);
 			Log.d(TAG, "Result: " + r);
 		}
-		// Результат пустой, может слишком громко?
+		// Р РµР·СѓР»СЊС‚Р°С‚ РїСѓСЃС‚РѕР№, РјРѕР¶РµС‚ СЃР»РёС€РєРѕРј РіСЂРѕРјРєРѕ?
 		if (results.isEmpty())
 		{
 			Log.d(TAG, "Google can't understand you");
 			errorCount++;
 			noErrorTimer = 0;
-			if (errorCount >= MAX_ERROR_COUNT) // А бывает иначе?
+			if (errorCount >= MAX_ERROR_COUNT) // Рђ Р±С‹РІР°РµС‚ РёРЅР°С‡Рµ?
 			{
 				if (maxLevel > detectLevel)
 				{
