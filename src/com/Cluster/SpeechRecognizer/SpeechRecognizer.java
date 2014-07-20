@@ -217,7 +217,7 @@ public class SpeechRecognizer
 			}
 
 			// Анализ фоновой громоксти
-			// Запоминаем максимальную среднюю громкость
+			// Запоминаем максимальную громкость
 			if (maxAmplitude > maxLevel)
 			{
 				maxLevel = maxAmplitude;
