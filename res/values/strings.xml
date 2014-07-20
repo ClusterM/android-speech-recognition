@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Continuous voice recognition demo</string>
+    <string name="calibration">Tss! Keep quiet and wait few seconds...</string>
+    <string name="speak">Speak to me!</string>
+    <string name="action_settings">Settings</string>
+
+</resources>
